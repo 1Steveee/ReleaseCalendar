@@ -25,10 +25,13 @@ class StoreRelease:
                 today = date.today().strftime("%m/%d/%y")
                 if statusCode:
                     for product in jsonObj['products']:
+                        # if product not already on release calendar, then alert and add to monitor list
                         if product['styleColor'] not in self.upcomingStock:
+                            # if not active and release date is in the future
                             if not product['isActive'] and product['releaseDate'] > today:
                                 self.upcomingStock.append(product['styleColor'])
                                 print(f'New product added to release calendar - {product["name"]}')
+                        # if product is already on the release calendar and the date is in the past, then remove
                         else:
                             if product['isActive'] and today > product['releaseDate']:
                                 self.upcomingStock.remove(product['styleColor'])
@@ -54,21 +57,6 @@ class StoreRelease:
                     for product in jsonObj['products']:
                         if not product['isActive'] and product['releaseDate'] > today:
                             self.upcomingStock.append(product['styleColor'])
-                            # embed = DiscordEmbed(title="New Product Added!", description="Lesss Cook", color='00FF00')
-                            # embed.set_author(name="Vasilis Software")
-                            # embed.set_footer(text=f"{self.site} Release Calendar")
-                            # # Set `inline=False` for the embed field to occupy the whole line
-                            # embed.set_thumbnail(url="https://dynl.mktgcdn.com/p/9mc68tD1fQAi5AZw6QOH8nW3U_YQ7Jg0UWvrDmXd5fI/1008x1008.png")
-                            # embed.add_embed_field(name="Name", value=f"{product['name']}", inline=False)
-                            # embed.add_embed_field(name="Release Date", value=f"{product['releaseDate']}", inline=False)
-                            # embed.add_embed_field(name="Price", value=f"{product['salePrice']}")
-                            # # embed.add_embed_field(name="Action",
-                            # #                       value=f"[Product Page](https://www.finishline.com/store/product/fnl/prodclea{product['PRODUCT_ID']}?styleId={product['STYLE_ID']}&colorId={product['COLOR_ID']})")
-                            # webhook = DiscordWebhook(
-                            #     url='https://discord.com/api/webhooks/1016186649077633055/5Kwlelmi2-wAf9dX928QYe9dLE5akn13eR2eCGuVPXGmCk3VISJeFSikDyKj_6I29x_u',
-                            #     rate_limit_retry=True)
-                            # webhook.add_embed(embed)
-                            # webhook.execute()
                     print(f'Cached all future release products, {self.upcomingStock}')
                     break
                 else:
