@@ -26,7 +26,7 @@ class StoreRelease:
                     for product in jsonObj['products']:
                         # if product not already on release calendar, then alert and add to monitor list
                         if product['styleColor'] not in self.upcomingStock:
-                            # if not active and release date is in the future, then alert discord and add to list
+                            # if not active and release date is in the future, then alert discord and add to lists
                             if not product['isActive'] and product['releaseDate'] > today:
                                 self.upcomingStock.append(product['styleColor'])
                                 print(f'New product added to release calendar - {product["name"]}')
